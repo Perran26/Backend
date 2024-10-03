@@ -1,51 +1,46 @@
-# API HERE
-from os import name
-from flask import Flask, jsonify, request 
+from flask import Flask, jsonify, request
 
-app= Flask(__name__)
+app = Flask(__name__)
 
-@app.get('/user')
-def get_all_user():
-    user_data = users_db
-    if user_data:
-        return jsonify(user_data), 200
-    else:
-        return { "response": "That resource could not be found!"}, 404
+@app.get('/users')
+def get_all_users():
+    users_data = users_db
 
-@app.post('/getuser')
+    if users_data:
+        return jsonify(users_data), 200
+    else: 
+        return { "response": "That resource could not be found!" }, 404
+
+@app.post('/user')
 def create_new_user():
-    input= request.get_json()
-    name=input["name"]
-    email=input["email"]
-    user_id=create_user(users_db, name, email)
+    input = request.get_json()
+    name = input["name"]
+    email = input["email"]
+    user_id = create_user(users_db, name, email)
 
-    user=get_user(user_id)
-
+    user = get_user(user_id)
 
     if user:
         return jsonify(get_user(user_id)), 200
     else:
-        return{ "Response": "Failed to create a new user!" }
+        return { "Response": "Failed to create a new user!" }
     
-    @app.get('/user/<int: user_id>')
-    def get_user_by_id(user_id):
-        user_data = get_user(user_id)
+@app.get('/user/<int:user_id>')
+def get_user_by_id(user_id):
+    user_data = get_user(user_id)
 
-        if user_data:
-            return jsonify(user_data), 200
-        else:
-            return { " response ": "A user with that ID was not found!" }, 400
-        
-    @app.delete('/user/<int:user_id>')
-    def delete_user(user_id):
-        if delete_user(user_id):
-            return { "Responce": " A user with id: {user_id} was deleted!"}, 200
-        else:
-            return {" response": f"Failed to delete user with id:{user_id}"}, 400
-# get    /users
-# post   /user
-# get    /user/123
-# delete /user/123
+    if user_data:
+        return jsonify(user_data), 200
+    else:
+        return { "response": "A user with that ID was not found!" }, 404
+    
+@app.delete('/user/<int:user_id>')
+def delete_user_by_id(user_id):
+    if delete_user(user_id):
+        return { "response": f"A user with id:{user_id} was deleted!" }
+    else:
+        return { "response": f"Failed to delete user with id:{user_id}!" }, 400
+
 
 # Fake Database
 users_db = [
