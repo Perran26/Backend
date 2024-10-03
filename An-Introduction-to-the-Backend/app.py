@@ -14,7 +14,8 @@ def get_all_user():
 
 @app.post('/getuser')
 def create_new_user():
-    input= request["name"]
+    input= request.get_json()
+    name=input["name"]
     email=input["email"]
     user_id=create_user(users_db, name, email)
 
@@ -24,7 +25,7 @@ def create_new_user():
     if user:
         return jsonify(get_user(user_id)), 200
     else:
-        return{ "Response": "Failed to create a new user!" }, 404   
+        return{ "Response": "Failed to create a new user!" }
     
     @app.get('/user/<int: user_id>')
     def get_user_by_id(user_id):
