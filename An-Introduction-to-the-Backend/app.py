@@ -1,6 +1,6 @@
 # API HERE
 from os import name
-from flask import Flask, jsonify, request # type: ignore
+from flask import Flask, jsonify, request 
 
 app= Flask(__name__)
 
